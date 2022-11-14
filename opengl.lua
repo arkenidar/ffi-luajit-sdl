@@ -1,8 +1,16 @@
 local ffi = require("ffi")
 
 local SDL = ffi.load('SDL2')
-local GL = ffi.load('GL')
-local GLU = ffi.load('GLU')
+
+local GL, GLU
+local binary_format = package.cpath:match("%p[\\|/]?%p(%a+)")
+if binary_format == "so" then -- Linux
+  GL = ffi.load('GL')
+  GLU = ffi.load('GLU')
+elseif binary_format == "dll" then -- Windows
+  GL = ffi.load('openGL32')
+  GLU = ffi.load('GLU32')
+end
 
 --[[
 /* this is includes.c, processed with:
@@ -87,4 +95,4 @@ while looping do
   SDL.SDL_GL_SwapWindow(window)
 end
 
-SDL.SDL_Quit()
+--SDL.SDL_Quit() -- freezes in Windows
