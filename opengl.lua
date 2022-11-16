@@ -2,15 +2,12 @@ local ffi = require("ffi")
 
 local SDL = ffi.load('SDL2')
 
-local GL, GLU
-local binary_format = package.cpath:match("%p[\\|/]?%p(%a+)")
-if binary_format == "so" then -- Linux
-  GL = ffi.load('GL')
-  GLU = ffi.load('GLU')
-elseif binary_format == "dll" then -- Windows
-  GL = ffi.load('openGL32')
-  GLU = ffi.load('GLU32')
-end
+local libraries={}
+libraries.GL={Linux='GL',Windows='openGL32'}
+libraries.GLU={Linux='GLU',Windows='GLU32'}
+
+local GL = ffi.load(libraries.GL[ffi.os])
+local GLU = ffi.load(libraries.GLU[ffi.os])
 
 --[[
 /* this is includes.c, processed with:
