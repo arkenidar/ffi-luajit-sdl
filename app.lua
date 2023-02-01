@@ -1,4 +1,12 @@
 local ffi = require("ffi")
+--[[
+https://gist.github.com/creationix/1213280/a97d7051decb2f1d3e8844186bbff49b6442700a
+-- Parse the C API header
+-- It's generated with:
+--
+--     echo '#include <SDL.h>' > stub.c
+--     gcc -I /usr/include/SDL -E stub.c | grep -v '^#' > ffi_SDL.h
+--]]
 ffi.cdef( io.open('ffi_defs.h','r'):read('*a') )
 local SDL = ffi.load('SDL2')
 
