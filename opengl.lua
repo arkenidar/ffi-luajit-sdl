@@ -14,10 +14,10 @@ local GLU = ffi.load(libraries.GLU[ffi.os])
 
 gcc -E includes.c | grep -v '^#' > ffi_defs_gl.h
 */
-#include <SDL2/SDL.h>
+ #include <SDL2/SDL.h>
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+ #include <GL/gl.h>
+ #include <GL/glu.h>
 
 ]]
 ffi.cdef( io.open('ffi_defs_gl.h','r'):read('*a') )
