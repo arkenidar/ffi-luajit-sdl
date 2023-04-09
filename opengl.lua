@@ -53,10 +53,16 @@ function draw()
   GL.glClear(GL_COLOR_BUFFER_BIT)
 
 	GL.glBegin(4) --   220: #define GL_TRIANGLES				0x0004
-  GL.glColor3f(0.1, 0.2, 0.3)
+  
+  GL.glColor3f(1, 0, 0)
   GL.glVertex3f(0, 0, 0)
+
+  GL.glColor3f(0, 1, 0)
   GL.glVertex3f(1, 0, 0)
+
+  GL.glColor3f(1, 1, 0)
   GL.glVertex3f(0, 1, 0)
+
 	GL.glEnd()
 end
 
