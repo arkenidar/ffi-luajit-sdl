@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "luajit maze.lua",
+            "request": "launch",
+            "type": "lua",
+            "luaVersion": "jit",
+            "program": "${workspaceFolder}/maze.lua",
+            "stopOnEntry": false
+        },
+        {
+            "name": "luajit opengl.lua",
+            "request": "launch",
+            "type": "lua",
+            "luaVersion": "jit",
+            "program": "${workspaceFolder}/opengl.lua",
+            "stopOnEntry": false
+        },
+        {
+            "name": "luajit app.lua",
+            "request": "launch",
+            "type": "lua",
+            "luaVersion": "jit",
+            "program": "${workspaceFolder}/app.lua",
+            "stopOnEntry": false
+        }
+    ]
+}
