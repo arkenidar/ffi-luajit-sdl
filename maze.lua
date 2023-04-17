@@ -108,6 +108,11 @@ end
 ------------------------------------------------------------
 
 local event = ffi.new("SDL_Event")
+
+function key_down(key)
+  return ( event.type == SDL.SDL_KEYDOWN and event.key.keysym.sym == SDL["SDLK_"..string.upper(key)] )
+end
+
 local looping = true
 
 local mouse_position={0,0}
@@ -117,7 +122,8 @@ while looping do
 
   while SDL.SDL_PollEvent(event) ~= 0 do
     if event.type == SDL.SDL_QUIT or
-    ( event.type == SDL.SDL_KEYDOWN and event.key.keysym.sym == SDL.SDLK_ESCAPE ) 
+    ---( event.type == SDL.SDL_KEYDOWN and event.key.keysym.sym == SDL.SDLK_ESCAPE )
+    key_down("escape")
     then
         looping = false
 
