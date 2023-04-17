@@ -54,8 +54,10 @@ function load_map(file_path)
 end
 
 function next_map()
-  map_current=1+map_current
-  load_map("assets/map"..map[map_current]..".txt")
+  if map[map_current+1] then
+    map_current=1+map_current
+    load_map("assets/map"..map[map_current]..".txt")
+  end
 end
 
 function load()
