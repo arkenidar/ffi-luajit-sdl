@@ -87,6 +87,29 @@ function draw()
   end
 end
 
+function going(tx,ty)
+  local going=grid[ty][tx]
+  if going~="#" then
+    px,py=tx,ty
+    if going=="E" then next_map() end
+  end
+end
+
+function process_events()
+  if key_down("space") then next_map() end
+  
+  local tx,ty=px,py
+  if key_down("up") then ty=ty-1 end
+  if key_down("down") then ty=ty+1 end
+  if key_down("left") then tx=tx-1 end
+  if key_down("right") then tx=tx+1 end
+  
+  if tx~=px or ty~=py then
+    going(tx,ty)
+  end
+  
+end
+
 function update(mouse_position,mouse_down)
   if mouse_down then
     local mx,my=mouse_position[1],mouse_position[2]
@@ -97,11 +120,7 @@ function update(mouse_position,mouse_down)
       (math.abs(tx-px)==1 and ty==py)
       or (math.abs(ty-py)==1 and tx==px)
       then
-        local going=grid[ty][tx]
-        if going~="#" then
-          px,py=tx,ty
-          if going=="E" then next_map() end
-        end
+        going(tx,ty)
       end
     end
   
@@ -123,9 +142,7 @@ local mouse_down=false
 while looping do
 
   while SDL.SDL_PollEvent(event) ~= 0 do
-    if event.type == SDL.SDL_QUIT or
-    ---( event.type == SDL.SDL_KEYDOWN and event.key.keysym.sym == SDL.SDLK_ESCAPE )
-    key_down("escape")
+    if event.type == SDL.SDL_QUIT or key_down("escape")
     then
         looping = false
 
@@ -138,6 +155,8 @@ while looping do
     elseif event.type == SDL.SDL_MOUSEMOTION then
       mouse_position = {event.button.x, event.button.y}
     end
+    
+    process_events()
   end
   
   update(mouse_position,mouse_down)
