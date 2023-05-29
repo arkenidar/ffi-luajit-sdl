@@ -1,10 +1,55 @@
 {
     "version": "0.2.0",
     "configurations": [
+
+        // "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+        {
+            /* lua-local is needed for loading e.g. require("socket") */
+            "name": "luajit maze.lua (lua-local loads installed modules such as 'socket' module)",
+            "request": "launch",
+            "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+
+            "program": {
+                "lua": "luajit", // "lua", "lua5.1" (etc), or "luajit" etc
+                "file": "${workspaceFolder}/maze.lua"
+            },
+            "stopOnEntry": false
+        }
+        ,
+        {
+            /* lua-local is needed for loading e.g. require("socket") */
+            "name": "luajit opengl.lua (lua-local loads installed modules such as 'socket' module)",
+            "request": "launch",
+            "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+
+            "program": {
+                "lua": "luajit", // "lua", "lua5.1" (etc), or "luajit" etc
+                "file": "${workspaceFolder}/opengl.lua"
+            },
+            "stopOnEntry": false
+        }
+        ,
+        {
+            /* lua-local is needed for loading e.g. require("socket") */
+            "name": "luajit app.lua (lua-local loads installed modules such as 'socket' module)",
+            "request": "launch",
+            "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+
+            "program": {
+                "lua": "luajit", // "lua", "lua5.1" (etc), or "luajit" etc
+                "file": "${workspaceFolder}/app.lua"
+            },
+            "stopOnEntry": false
+        }
+        ,
+
+        //================================================================================
+
+        // "type": "lua", // https://marketplace.visualstudio.com/items?itemName=actboy168.lua-debug
         {
             "name": "luajit maze.lua",
             "request": "launch",
-            "type": "lua",
+            "type": "lua", // https://marketplace.visualstudio.com/items?itemName=actboy168.lua-debug
             "luaVersion": "jit",
             "program": "${workspaceFolder}/maze.lua",
             "stopOnEntry": false
@@ -12,7 +57,7 @@
         {
             "name": "luajit opengl.lua",
             "request": "launch",
-            "type": "lua",
+            "type": "lua", // https://marketplace.visualstudio.com/items?itemName=actboy168.lua-debug
             "luaVersion": "jit",
             "program": "${workspaceFolder}/opengl.lua",
             "stopOnEntry": false
@@ -20,7 +65,7 @@
         {
             "name": "luajit app.lua",
             "request": "launch",
-            "type": "lua",
+            "type": "lua", // https://marketplace.visualstudio.com/items?itemName=actboy168.lua-debug
             "luaVersion": "jit",
             "program": "${workspaceFolder}/app.lua",
             "stopOnEntry": false
