@@ -47,23 +47,45 @@ image_transparency(image_surface,rgb)
 
 local event = ffi.new("SDL_Event")
 local looping = true
+
+local movement = 0
+
 while looping do
+
+  -- update (before draw)
+
   while SDL.SDL_PollEvent(event) ~= 0 do
+
+    if event.type == SDL.SDL_KEYDOWN and event.key.keysym.sym == SDL.SDLK_RIGHT then
+      movement = movement + 10
+    elseif event.type == SDL.SDL_KEYDOWN and event.key.keysym.sym == SDL.SDLK_LEFT then
+      movement = movement - 10
+    end
+
     if event.type == SDL.SDL_QUIT or
-    ( event.type == SDL.SDL_KEYDOWN and event.key.keysym.sym == SDL.SDLK_ESCAPE ) 
+    ( event.type == SDL.SDL_KEYDOWN and event.key.keysym.sym == SDL.SDLK_ESCAPE )
     then
+        -- exit
         looping = false
+        break
     end
   end
+
+  if not looping then break end
+
+  -- draw (after update)
+
+  surface_draw_rect({255,255,255}) -- draw-begin: clear
 
   local rgb={255,255,0}
   local xywh={0,0, 100, 100}
 
   surface_draw_rect(rgb, xywh)
 
+  xywh[1] = xywh[1] + xywh[3] + movement -- image put aside
   surface_draw_image(image_surface, xywh)
 
-  SDL.SDL_UpdateWindowSurface(window)
+  SDL.SDL_UpdateWindowSurface(window) -- draw-end: present
 
 end
 
