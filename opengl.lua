@@ -1,14 +1,6 @@
+---@diagnostic disable: lowercase-global
+--================================================
 local ffi = require("ffi")
-
-local SDL = ffi.load('SDL2')
-
-local libraries={}
-libraries.GL={Linux='GL',Windows='openGL32'}
-libraries.GLU={Linux='GLU',Windows='GLU32'}
-
-local GL = ffi.load(libraries.GL[ffi.os])
-local GLU = ffi.load(libraries.GLU[ffi.os])
-
 --[[
 /* this is includes.c, processed with:
 
@@ -22,49 +14,179 @@ gcc -E includes.c | grep -v '^#' > ffi_defs_gl.h
 ]]
 ffi.cdef( io.open('ffi_defs_gl.h','r'):read('*a') )
 
-SDL.SDL_Init(0)
+local SDL = ffi.load('SDL2')
 
---[[
-(SublimeText's "find in files" shows this)
+local libraries={}
+libraries.GL={Linux='GL',Windows='openGL32'}
+libraries.GLU={Linux='GLU',Windows='GLU32'}
+local GL = ffi.load(libraries.GL[ffi.os])
+local GLU = ffi.load(libraries.GLU[ffi.os])
 
-/usr/include/SDL2/SDL_video.h:
-   98  {
-   99      SDL_WINDOW_FULLSCREEN = 0x00000001,         /**< fullscreen window */
-  100:     SDL_WINDOW_OPENGL = 0x00000002,             /**< window usable with OpenGL context */
-  101      SDL_WINDOW_SHOWN = 0x00000004,              /**< window is visible */
-  102      SDL_WINDOW_HIDDEN = 0x00000008,             /**< window is not visible */
-]]
-local SDL_WINDOW_OPENGL = 2
+require("sdl-defs")(SDL)
+require("opengl-defs")(GL,GLU)
+--====================================
+
+SDL_Init(0)
+
 local window_width, window_height = 400, 300
-local window = SDL.SDL_CreateWindow("opengl in sdl", 50,50, window_width, window_height, SDL_WINDOW_OPENGL)
+local window = SDL_CreateWindow("opengl in sdl", 50,50, window_width, window_height, SDL_WINDOW_OPENGL)
 
-context = SDL.SDL_GL_CreateContext(window)
-
--- #define GL_COLOR_BUFFER_BIT			0x00004000
-local GL_COLOR_BUFFER_BIT	= 0x00004000
+context = SDL_GL_CreateContext(window)
 
 function update(mouse_position,mouse_down)
 	-- to be defined
 end
 
+local bit = require("bit")
+local binary_or = bit.bor
+
+local angle = 0
+
 function draw()
-  GL.glViewport(0, 0, window_width, window_height)
-  GL.glClearColor(1.0, 0.0, 1.0, 0.0)
-  GL.glClear(GL_COLOR_BUFFER_BIT)
 
-	GL.glBegin(4) --   220: #define GL_TRIANGLES				0x0004
-  
-  GL.glColor3f(1, 0, 0)
-  GL.glVertex3f(0, 0, 0)
+  -- update scene
 
-  GL.glColor3f(0, 1, 0)
-  GL.glVertex3f(1, 0, 0)
+  angle = angle + 0.01
 
-  GL.glColor3f(1, 1, 0)
-  GL.glVertex3f(0, 1, 0)
+  -- draw scene
 
-	GL.glEnd()
+  local lightPosition = ffi.new("float[4]",15,10,5,1)
+  local lightAmbient = ffi.new("float[4]",0.1,0.1,0.1,1)
+  local lightDiffuse = ffi.new("float[4]",0.9,0.9,0.9,1)
+
+  local redMaterial = ffi.new("float[4]",1,0,0,1)
+  local blueMaterial = ffi.new("float[4]",0,0,1,1)
+
+  glViewport(0, 0, window_width, window_height);
+
+  glClearColor(1,1,1,0);
+  glClear( binary_or(GL_COLOR_BUFFER_BIT ,GL_DEPTH_BUFFER_BIT) );
+  glEnable(GL_DEPTH_TEST);
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  gluPerspective(30,window_width/window_height,1,200);
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  gluLookAt( 5,10,15, 0,0,0, 0,1,0);
+
+  glShadeModel(GL_SMOOTH);
+  glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+  glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+  glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHTING);
+
+  glMaterialfv(GL_FRONT, GL_AMBIENT, blueMaterial);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, blueMaterial);
+
+  glPushMatrix();
+  glRotated(angle, 0., 1., 0.);
+  drawBox(-1, -1, -1, 1, 1, 1);
+
+  glMaterialfv(GL_FRONT, GL_AMBIENT, redMaterial);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, redMaterial);
+
+  glPushMatrix();
+  glTranslated(0.,1.75,0.);
+  glRotated(angle, 0., 1., 0.);
+  drawBox(-.5,-.5,-.5,.5,.5,.5);
+  glPopMatrix();
+
+  glPushMatrix();
+  glTranslated(0.,-1.75,0.);
+  glRotated(angle, 0., 1., 0.);
+  drawBox(-.5,-.5,-.5,.5,.5,.5);
+  glPopMatrix();
+
+  glPushMatrix();
+  glRotated(90., 1., 0., 0.);
+  glTranslated(0.,1.75,0.);
+  glRotated(angle, 0., 1., 0.);
+  drawBox(-.5,-.5,-.5,.5,.5,.5);
+  glPopMatrix();
+
+  glPushMatrix();
+  glRotated(90., -1., 0., 0.);
+  glTranslated(0.,1.75,0.);
+  glRotated(angle, 0., 1., 0.);
+  drawBox(-.5,-.5,-.5,.5,.5,.5);
+  glPopMatrix();
+
+  glPushMatrix();
+  glRotated(90., 0., 0., 1.);
+  glTranslated(0.,1.75,0.);
+  glRotated(angle, 0., 1., 0.);
+  drawBox(-.5,-.5,-.5,.5,.5,.5);
+  glPopMatrix();
+
+  glPushMatrix();
+  glRotated(90., 0., 0., -1.);
+  glTranslated(0.,1.75,0.);
+  glRotated(angle, 0., 1., 0.);
+  drawBox(-.5,-.5,-.5,.5,.5,.5);
+  glPopMatrix();
+
+  glPopMatrix();
+
 end
+
+-- // (cleaner) code import from gltest.cpp (part of https://fox-toolkit.org/)
+
+-- // Draws a simple box using the given corners
+function drawBox(xmin, ymin, zmin, xmax, ymax, zmax)
+
+  glBegin(GL_TRIANGLE_STRIP);
+    glNormal3f(0.,0.,-1.);
+    glVertex3f(xmin, ymin, zmin);
+    glVertex3f(xmin, ymax, zmin);
+    glVertex3f(xmax, ymin, zmin);
+    glVertex3f(xmax, ymax, zmin);
+  glEnd();
+
+  glBegin(GL_TRIANGLE_STRIP);
+    glNormal3f(1.,0.,0.);
+    glVertex3f(xmax, ymin, zmin);
+    glVertex3f(xmax, ymax, zmin);
+    glVertex3f(xmax, ymin, zmax);
+    glVertex3f(xmax, ymax, zmax);
+  glEnd();
+
+  glBegin(GL_TRIANGLE_STRIP);
+    glNormal3f(0.,0.,1.);
+    glVertex3f(xmax, ymin, zmax);
+    glVertex3f(xmax, ymax, zmax);
+    glVertex3f(xmin, ymin, zmax);
+    glVertex3f(xmin, ymax, zmax);
+  glEnd();
+
+  glBegin(GL_TRIANGLE_STRIP);
+    glNormal3f(-1.,0.,0.);
+    glVertex3f(xmin, ymin, zmax);
+    glVertex3f(xmin, ymax, zmax);
+    glVertex3f(xmin, ymin, zmin);
+    glVertex3f(xmin, ymax, zmin);
+  glEnd();
+
+  glBegin(GL_TRIANGLE_STRIP);
+    glNormal3f(0.,1.,0.);
+    glVertex3f(xmin, ymax, zmin);
+    glVertex3f(xmin, ymax, zmax);
+    glVertex3f(xmax, ymax, zmin);
+    glVertex3f(xmax, ymax, zmax);
+  glEnd();
+
+  glBegin(GL_TRIANGLE_STRIP);
+    glNormal3f(0.,-1.,0.);
+    glVertex3f(xmax, ymin, zmax);
+    glVertex3f(xmax, ymin, zmin);
+    glVertex3f(xmin, ymin, zmax);
+    glVertex3f(xmin, ymin, zmin);
+  glEnd();
+end
+
+--=============================
 
 local event = ffi.new("SDL_Event")
 local looping = true
@@ -74,19 +196,19 @@ local mouse_down=false
 
 while looping do
 
-  while SDL.SDL_PollEvent(event) ~= 0 do
-    if event.type == SDL.SDL_QUIT or
-    ( event.type == SDL.SDL_KEYDOWN and event.key.keysym.sym == SDL.SDLK_ESCAPE ) 
+  while SDL_PollEvent(event) ~= 0 do
+    if event.type == SDL_QUIT or
+    ( event.type == SDL_KEYDOWN and event.key.keysym.sym == SDLK_ESCAPE ) 
     then
         looping = false
 
-    elseif event.type == SDL.SDL_MOUSEBUTTONDOWN then
+    elseif event.type == SDL_MOUSEBUTTONDOWN then
       mouse_down = true
 
-    elseif event.type == SDL.SDL_MOUSEBUTTONUP then
+    elseif event.type == SDL_MOUSEBUTTONUP then
       mouse_down = false
       
-    elseif event.type == SDL.SDL_MOUSEMOTION then
+    elseif event.type == SDL_MOUSEMOTION then
       mouse_position = {event.button.x, event.button.y}
     end
   end
@@ -95,7 +217,7 @@ while looping do
 
   draw()
 
-  SDL.SDL_GL_SwapWindow(window)
+  SDL_GL_SwapWindow(window)
 end
 
---SDL.SDL_Quit() -- freezes in Windows
+SDL_Quit()
