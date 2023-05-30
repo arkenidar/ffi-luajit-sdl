@@ -1,4 +1,11 @@
 
+| script | description |
+|--------|-------------|
+| maze.lua | 2d with input and asset loader |
+| opengl.lua | 3d |
+| app.lua | basic |
+
+```
 some credit and further documentation:
 
 Using SDL from luajit's built-in ffi module
@@ -14,3 +21,4 @@ local ffi = require "ffi"
 ffi.cdef(io.open('ffi_SDL.h', 'r'):read('*a'))
 -- Load the shared object
 local SDL = ffi.load('SDL')
+```
