@@ -1,4 +1,4 @@
-
+launch with LuaJIT.org for example `luajit maze.lua`
 | script | description |
 |--------|-------------|
 | maze.lua | 2d with input and asset loader |
