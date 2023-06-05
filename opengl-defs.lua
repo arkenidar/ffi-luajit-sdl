@@ -62,5 +62,7 @@ glPopMatrix = GL.glPopMatrix
 glTranslated = GL.glTranslated
 glRotated = GL.glRotated
 
+glScalef = GL.glScalef
+
 end
 --===========================

@@ -46,7 +46,7 @@ function draw()
 
   -- update scene
 
-  angle = angle + 0.01
+  angle = angle + 1
 
   -- draw scene
 
@@ -56,6 +56,9 @@ function draw()
 
   local redMaterial = ffi.new("float[4]",1,0,0,1)
   local blueMaterial = ffi.new("float[4]",0,0,1,1)
+
+  local greyMaterial = ffi.new("float[4]",0.5,0.5,0.5,1)
+  local greenMaterial = ffi.new("float[4]",0,1,0,1)
 
   glViewport(0, 0, window_width, window_height);
 
@@ -69,7 +72,7 @@ function draw()
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  gluLookAt( 5,10,15, 0,0,0, 0,1,0);
+  gluLookAt( 20,5,40, 0,0,0, 0,1,0);
 
   glShadeModel(GL_SMOOTH);
   glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
@@ -78,14 +81,21 @@ function draw()
   glEnable(GL_LIGHT0);
   glEnable(GL_LIGHTING);
 
-  glMaterialfv(GL_FRONT, GL_AMBIENT, blueMaterial);
-  glMaterialfv(GL_FRONT, GL_DIFFUSE, blueMaterial);
+  glMaterialfv(GL_FRONT, GL_AMBIENT, greyMaterial);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, greenMaterial);
 
   glPushMatrix();
   glRotated(angle, 0., 1., 0.);
-  drawBox(-1, -1, -1, 1, 1, 1);
+  ---drawBox(-1, -1, -1, 1, 1, 1);
 
-  glMaterialfv(GL_FRONT, GL_AMBIENT, redMaterial);
+  glPushMatrix();
+  local factor = 5
+  glScalef( factor, factor, factor );
+  draw_model(model)
+  glPopMatrix();
+
+  --[[
+  glMaterialfv(GL_FRONT, GL_AMBIENT, greyMaterial);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, redMaterial);
 
   glPushMatrix();
@@ -127,9 +137,41 @@ function draw()
   glRotated(angle, 0., 1., 0.);
   drawBox(-.5,-.5,-.5,.5,.5,.5);
   glPopMatrix();
+  
+  --]]
 
   glPopMatrix();
 
+end
+
+----------------------------------------------
+require("loader")
+model = load_obj_file("assets/head.obj")
+function draw_model(model)
+  --[[
+  glBegin(GL_TRIANGLE_STRIP);
+    glNormal3f(0.,0.,-1.);
+    glVertex3f(xmin, ymin, zmin);
+    glVertex3f(xmin, ymax, zmin);
+    glVertex3f(xmax, ymin, zmin);
+    glVertex3f(xmax, ymax, zmin);
+  glEnd();
+  --]]
+  glBegin(GL_TRIANGLES)
+
+  -- glNormal3f, glVertex3f
+  for _,triangle in ipairs(model) do
+    glNormal3f(triangle[1].normal.x, triangle[1].normal.y, triangle[1].normal.z)
+    glVertex3f(triangle[1].x, triangle[1].y, triangle[1].z)
+
+    glNormal3f(triangle[2].normal.x, triangle[2].normal.y, triangle[2].normal.z)
+    glVertex3f(triangle[2].x, triangle[2].y, triangle[2].z)
+
+    glNormal3f(triangle[3].normal.x, triangle[3].normal.y, triangle[3].normal.z)
+    glVertex3f(triangle[3].x, triangle[3].y, triangle[3].z)
+  end
+
+  glEnd()
 end
 
 -- // (cleaner) code import from gltest.cpp (part of https://fox-toolkit.org/)
