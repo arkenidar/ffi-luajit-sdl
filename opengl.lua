@@ -22,8 +22,8 @@ libraries.GLU={Linux='GLU',Windows='GLU32'}
 local GL = ffi.load(libraries.GL[ffi.os])
 local GLU = ffi.load(libraries.GLU[ffi.os])
 
-require("sdl-defs")(SDL)
-require("opengl-defs")(GL,GLU)
+--require("sdl-defs")(SDL)
+require("opengl-defs")(GL,GLU,SDL)
 --====================================
 
 SDL_Init(0)
