@@ -4,8 +4,9 @@
 ]]
 --=============================================
 return function(SDL)
+--[[
 SDL_Init = SDL.SDL_Init
-SDL_WINDOW_OPENGL = 2
+--SDL_WINDOW_OPENGL = 2
 SDL_CreateWindow = SDL.SDL_CreateWindow
 SDL_GL_CreateContext = SDL.SDL_GL_CreateContext
 SDL_PollEvent = SDL.SDL_PollEvent
@@ -17,4 +18,17 @@ SDL_MOUSEBUTTONUP = SDL.SDL_MOUSEBUTTONUP
 SDL_MOUSEMOTION = SDL.SDL_MOUSEMOTION
 SDL_GL_SwapWindow = SDL.SDL_GL_SwapWindow
 SDL_Quit = SDL.SDL_Quit
+--]]
+
+---[[
+--SDL_WINDOW_OPENGL = 2
+_G=setmetatable(_G, {
+	__index = function(self, index) -- index function CASE
+    if "SDL"==string.sub(index,1,3) then
+      return SDL[index]
+    end
+	end
+})
+--]]
+
 end
