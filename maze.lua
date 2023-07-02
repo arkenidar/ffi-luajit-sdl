@@ -1,18 +1,26 @@
 local ffi = require("ffi")
 ffi.cdef( io.open('ffi_defs.h','r'):read('*a') )
 local SDL = ffi.load('SDL2')
+---require("sdl-defs")(SDL)
+_G=setmetatable(_G, {
+	__index = function(self, index) -- index function CASE
+    if "SDL"==string.sub(index,1,3) then
+      return SDL[index]
+    end
+	end
+})
 
-SDL.SDL_Init(0)
-local window = SDL.SDL_CreateWindow("title", 50,50, 400,300, 0)
-local window_surface = SDL.SDL_GetWindowSurface(window)
+SDL_Init(0)
+local window = SDL_CreateWindow("title", 50,50, 400,300, 0)
+local window_surface = SDL_GetWindowSurface(window)
 
 function image_load(name)
-  local file = SDL.SDL_RWFromFile(name..".bmp", "rb")
-  return SDL.SDL_LoadBMP_RW(file, 1)
+  local file = SDL_RWFromFile(name..".bmp", "rb")
+  return SDL_LoadBMP_RW(file, 1)
 end
 function image_transparency(image_surface,rgb)
-  local key = SDL.SDL_MapRGB(window_surface.format,rgb[1],rgb[2],rgb[3])
-  SDL.SDL_SetColorKey(image_surface, SDL.SDL_TRUE, key)  
+  local key = SDL_MapRGB(window_surface.format,rgb[1],rgb[2],rgb[3])
+  SDL_SetColorKey(image_surface, SDL_TRUE, key)  
 end
 
 function rect_from_xywh(xywh)
@@ -26,11 +34,11 @@ return rect
 end
 
 function surface_draw_rect(rgb, xywh)
-SDL.SDL_FillRect(window_surface, rect_from_xywh(xywh), SDL.SDL_MapRGB(window_surface.format,rgb[1],rgb[2],rgb[3]))
+SDL_FillRect(window_surface, rect_from_xywh(xywh), SDL_MapRGB(window_surface.format,rgb[1],rgb[2],rgb[3]))
 end
 
 function surface_draw_image(image_surface, xywh)
-SDL.SDL_UpperBlitScaled(image_surface, nil, window_surface, rect_from_xywh(xywh) )
+SDL_UpperBlitScaled(image_surface, nil, window_surface, rect_from_xywh(xywh) )
 end
 
 ------------------------------------------------------------
@@ -131,7 +139,7 @@ end
 local event = ffi.new("SDL_Event")
 
 function key_down(key)
-  return ( event.type == SDL.SDL_KEYDOWN and event.key.keysym.sym == SDL["SDLK_"..string.upper(key)] )
+  return ( event.type == SDL_KEYDOWN and event.key.keysym.sym == SDL["SDLK_"..string.upper(key)] )
 end
 
 local looping = true
@@ -141,18 +149,18 @@ local mouse_down=false
 
 while looping do
 
-  while SDL.SDL_PollEvent(event) ~= 0 do
-    if event.type == SDL.SDL_QUIT or key_down("escape")
+  while SDL_PollEvent(event) ~= 0 do
+    if event.type == SDL_QUIT or key_down("escape")
     then
         looping = false
 
-    elseif event.type == SDL.SDL_MOUSEBUTTONDOWN then
+    elseif event.type == SDL_MOUSEBUTTONDOWN then
       mouse_down = true
 
-    elseif event.type == SDL.SDL_MOUSEBUTTONUP then
+    elseif event.type == SDL_MOUSEBUTTONUP then
       mouse_down = false
       
-    elseif event.type == SDL.SDL_MOUSEMOTION then
+    elseif event.type == SDL_MOUSEMOTION then
       mouse_position = {event.button.x, event.button.y}
     end
     
@@ -163,10 +171,10 @@ while looping do
 
   draw()
 
-  SDL.SDL_UpdateWindowSurface(window)
+  SDL_UpdateWindowSurface(window)
 
 end
 
-SDL.SDL_FreeSurface(image_surface)
+SDL_FreeSurface(image_surface)
 
-SDL.SDL_Quit()
+SDL_Quit()
