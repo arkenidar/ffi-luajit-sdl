@@ -161,14 +161,11 @@ function draw_model(model)
 
   -- glNormal3f, glVertex3f
   for _,triangle in ipairs(model) do
-    glNormal3f(triangle[1].normal.x, triangle[1].normal.y, triangle[1].normal.z)
-    glVertex3f(triangle[1].x, triangle[1].y, triangle[1].z)
-
-    glNormal3f(triangle[2].normal.x, triangle[2].normal.y, triangle[2].normal.z)
-    glVertex3f(triangle[2].x, triangle[2].y, triangle[2].z)
-
-    glNormal3f(triangle[3].normal.x, triangle[3].normal.y, triangle[3].normal.z)
-    glVertex3f(triangle[3].x, triangle[3].y, triangle[3].z)
+    local function normal(xyz) glNormal3f(xyz.x, xyz.y, xyz.z) end
+    local function vertex(xyz) glVertex3f(xyz.x, xyz.y, xyz.z) end
+    normal(triangle[1].normal); vertex(triangle[1])
+    normal(triangle[2].normal); vertex(triangle[2])
+    normal(triangle[3].normal); vertex(triangle[3])
   end
 
   glEnd()
