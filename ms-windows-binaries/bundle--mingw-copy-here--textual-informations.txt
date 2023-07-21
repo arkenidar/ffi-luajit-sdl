@@ -1,0 +1,24 @@
+
+C:\opt\Dropbox\gh-repos\starter-luajit-sdl\bundle--mingw-copy-here.cmd
+
+get LUAJIT SOURCES
+https://luajit.org/download.html
+git clone https://luajit.org/git/luajit.git
+
+read GITHUB GIST WITH INSTRUCTIONS
+https://gist.github.com/arkenidar/ebde4174dad3cf662f04a9e21ce4543b
+ How to build windowless* #Lua for #Windows (* meaning: no visible console for standard console output, no "console window", like pythonw.exe ) 
+
+PATCH SOURCES AND COMPILE WITH ADDITIONAL FLAGS
+
+PATCH SOURCES
+edit file : src/luajit.c
+// https://gist.github.com/arkenidar/ebde4174dad3cf662f04a9e21ce4543b
+append these 3 lines (content without "rem") to the end of src/luajit.c source file:
+
+#include <windows.h>
+int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+{ return main(__argc, __argv); }
+
+COMPILE WITH ADDITIONAL FLAGS
+make MYLDFLAGS=-mwindows
