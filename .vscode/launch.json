@@ -2,10 +2,55 @@
     "version": "0.2.0",
     "configurations": [
 
+        //================================================================================
+
         // "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
         {
             /* lua-local is needed for loading e.g. require("socket") */
-            "name": "luajit maze.lua (lua-local loads installed modules such as 'socket' module)",
+            "name": "MSYS luajit maze.lua (lua-local loads installed modules such as 'socket' module)",
+            "request": "launch",
+            "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+
+            "program": {
+                "lua": "c:/msys64/mingw64/bin/luajit.exe", // "lua", "lua5.1" (etc), or "luajit" etc
+                "file": "${workspaceFolder}/maze.lua"
+            },
+            "stopOnEntry": false
+        }
+        ,
+        {
+            /* lua-local is needed for loading e.g. require("socket") */
+            "name": "MSYS luajit opengl.lua (lua-local loads installed modules such as 'socket' module)",
+            "request": "launch",
+            "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+
+            "program": {
+                "lua": "c:/msys64/mingw64/bin/luajit.exe", // "lua", "lua5.1" (etc), or "luajit" etc
+                "file": "${workspaceFolder}/opengl.lua"
+            },
+            "stopOnEntry": false
+        }
+        ,
+        {
+            /* lua-local is needed for loading e.g. require("socket") */
+            "name": "MSYS luajit app.lua (lua-local loads installed modules such as 'socket' module)",
+            "request": "launch",
+            "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+
+            "program": {
+                "lua": "c:/msys64/mingw64/bin/luajit.exe", // "lua", "lua5.1" (etc), or "luajit" etc
+                "file": "${workspaceFolder}/app.lua"
+            },
+            "stopOnEntry": false
+        }
+        ,
+
+        //================================================================================
+
+        // "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
+        {
+            /* lua-local is needed for loading e.g. require("socket") */
+            "name": "PATH luajit maze.lua (lua-local loads installed modules such as 'socket' module)",
             "request": "launch",
             "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
 
@@ -18,7 +63,7 @@
         ,
         {
             /* lua-local is needed for loading e.g. require("socket") */
-            "name": "luajit opengl.lua (lua-local loads installed modules such as 'socket' module)",
+            "name": "PATH luajit opengl.lua (lua-local loads installed modules such as 'socket' module)",
             "request": "launch",
             "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
 
@@ -31,7 +76,7 @@
         ,
         {
             /* lua-local is needed for loading e.g. require("socket") */
-            "name": "luajit app.lua (lua-local loads installed modules such as 'socket' module)",
+            "name": "PATH luajit app.lua (lua-local loads installed modules such as 'socket' module)",
             "request": "launch",
             "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
 
