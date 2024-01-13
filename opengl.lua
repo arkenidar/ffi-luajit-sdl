@@ -90,7 +90,15 @@ function draw()
   glPushMatrix();
   local factor = 5
   glScalef(factor, factor, factor);
+  glTranslatef(.3, 0, 0);
   draw_model(model)
+  glPopMatrix();
+
+  glPushMatrix();
+  local factor = 5
+  glScalef(factor, factor, factor);
+  glTranslatef(0, -0.6, 0);
+  draw_model(model2)
   glPopMatrix();
 
   --[[
@@ -147,7 +155,9 @@ require("loader")
 -- "assets/cube.obj" was corrected in loading (previous loader was conflicting vertex normals, super-imposed, re-assigned)
 -- "assets/head.obj" more complex and more memory intensive also (memory use improvement)
 model = load_obj_file("assets/head.obj")
-print("loading: " .. (model and "OK" or "failed!"))
+print("loading model: " .. (model and "OK" or "failed!"))
+model2 = load_obj_file("assets/cube.obj")
+print("loading model2: " .. (model2 and "OK" or "failed!"))
 
 function draw_model(model)
   local triangles, indexable_vertex_position_xyz, indexable_vertex_normal_xyz = model[1], model[2], model[3]
