@@ -1,7 +1,7 @@
 {
     "Lua.diagnostics.disable": [
-        "lowercase-global",
-        "undefined-global"
+        "undefined-global",
+        "lowercase-global"
     ],
     "Lua.diagnostics.globals": [
         "love",
