@@ -12,6 +12,16 @@
             },
             "stopOnEntry": false
         },
+        {
+            "name": "opengl.lua BUNDLED EXE",
+            "request": "launch",
+            "type": "lua-local",
+            "program": {
+                "lua": "${workspaceFolder}/ms-windows-binaries/luajit-mwindows.exe",
+                "file": "${workspaceFolder}/opengl.lua"
+            },
+            "stopOnEntry": false
+        },
         //================================================================================
         // "type": "lua-local", // https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
         {
@@ -81,32 +91,7 @@
                 "file": "${workspaceFolder}/app.lua"
             },
             "stopOnEntry": false
-        },
-        //================================================================================
-        // "type": "lua", // https://marketplace.visualstudio.com/items?itemName=actboy168.lua-debug
-        {
-            "name": "luajit maze.lua",
-            "request": "launch",
-            "type": "lua", // https://marketplace.visualstudio.com/items?itemName=actboy168.lua-debug
-            "luaVersion": "jit",
-            "program": "${workspaceFolder}/maze.lua",
-            "stopOnEntry": false
-        },
-        {
-            "name": "luajit opengl.lua",
-            "request": "launch",
-            "type": "lua", // https://marketplace.visualstudio.com/items?itemName=actboy168.lua-debug
-            "luaVersion": "jit",
-            "program": "${workspaceFolder}/opengl.lua",
-            "stopOnEntry": false
-        },
-        {
-            "name": "luajit app.lua",
-            "request": "launch",
-            "type": "lua", // https://marketplace.visualstudio.com/items?itemName=actboy168.lua-debug
-            "luaVersion": "jit",
-            "program": "${workspaceFolder}/app.lua",
-            "stopOnEntry": false
         }
+        //================================================================================
     ]
 }

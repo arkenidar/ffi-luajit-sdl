@@ -147,6 +147,7 @@ require("loader")
 -- "assets/cube.obj" was corrected in loading (previous loader was conflicting vertex normals, super-imposed, re-assigned)
 -- "assets/head.obj" more complex and more memory intensive also (memory use improvement)
 model = load_obj_file("assets/head.obj")
+print("loading: "..(model and "OK" or "failed!"))
 
 function draw_model(model)
   local triangles, indexable_vertex_position_xyz, indexable_vertex_normal_xyz = model[1], model[2], model[3]
