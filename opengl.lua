@@ -101,6 +101,16 @@ function draw()
   draw_model(model2)
   glPopMatrix();
 
+  glMaterialfv(GL_FRONT, GL_AMBIENT, greyMaterial);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, blueMaterial);
+
+  glPushMatrix();
+  local factor = .1
+  glScalef(factor, factor, factor);
+  glTranslatef(0, 0, 0);
+  draw_model(model_axes)
+  glPopMatrix();
+
   --[[
   glMaterialfv(GL_FRONT, GL_AMBIENT, greyMaterial);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, redMaterial);
@@ -152,6 +162,10 @@ end
 
 ----------------------------------------------
 require("loader")
+
+model_axes = load_obj_file("assets/axes.obj") -- you can comment this line and viceversa
+print("loading model_axes: " .. (model_axes and "OK" or "failed!"))
+
 -- "assets/cube.obj" was corrected in loading (previous loader was conflicting vertex normals, super-imposed, re-assigned)
 -- "assets/head.obj" more complex and more memory intensive also (memory use improvement)
 model = load_obj_file("assets/head.obj")
@@ -160,6 +174,9 @@ model2 = load_obj_file("assets/cube.obj")
 print("loading model2: " .. (model2 and "OK" or "failed!"))
 
 function draw_model(model)
+  if not model then
+    return
+  end
   local triangles, indexable_vertex_position_xyz, indexable_vertex_normal_xyz = model[1], model[2], model[3]
   glBegin(GL_TRIANGLES)
   for _, triangle in ipairs(triangles) do
