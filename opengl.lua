@@ -174,6 +174,33 @@ model2 = load_obj_file("assets/cube.obj")
 print("loading model2: " .. (model2 and "OK" or "failed!"))
 
 function draw_model(model)
+  --[[
+  glBegin(GL_TRIANGLE_STRIP);
+    glNormal3f(0.,0.,-1.);
+    glVertex3f(xmin, ymin, zmin);
+    glVertex3f(xmin, ymax, zmin);
+    glVertex3f(xmax, ymin, zmin);
+    glVertex3f(xmax, ymax, zmin);
+  glEnd();
+  --]]
+  glBegin(GL_TRIANGLES)
+
+  -- glNormal3f, glVertex3f
+  for _, triangle in ipairs(model) do
+    local function normal(xyz) glNormal3f(xyz.x, xyz.y, xyz.z) end
+    local function vertex(xyz) glVertex3f(xyz.x, xyz.y, xyz.z) end
+    local function vertex_and_normal(xyz)
+      normal(xyz.normal); vertex(xyz)
+    end
+    vertex_and_normal(triangle[1])
+    vertex_and_normal(triangle[2])
+    vertex_and_normal(triangle[3])
+  end
+
+  glEnd()
+end
+
+function draw_model_2(model)
   if not model then
     return
   end
