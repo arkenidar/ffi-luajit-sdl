@@ -97,6 +97,7 @@ function draw()
 end
 
 function going(tx, ty)
+  if grid[ty] == nil or grid[ty][tx] == nil then return end
   local going = grid[ty][tx]
   if going ~= "#" then
     px, py = tx, ty
