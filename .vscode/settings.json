@@ -1,4 +1,6 @@
 {
+    "editor.defaultFormatter": "sumneko.lua",
+    "editor.formatOnSave": true,
     "Lua.diagnostics.disable": [
         "undefined-global",
         "lowercase-global"
