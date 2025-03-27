@@ -1,5 +1,8 @@
 For testing and scripting I used Linuxes (Debian, Arch), and MSYS/MINGW in Windows. Looking forward for Android too (WIP).
 
+# requirement to install
+sudo apt install libsdl2-dev # apt in Debian
+
 launch with LuaJIT.org for example `luajit maze.lua`
 | script | description |
 |--------|-------------|
